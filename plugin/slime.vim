@@ -193,6 +193,13 @@ function! s:SlimeSend(text)
   endfor
 endfunction
 
+function! s:SlimeSendRaw(text)
+  call s:SlimeGetConfig()
+  for piece in split(a:text, "\n")
+    call s:SlimeDispatch('Send', b:slime_config, piece . "\n")
+  endfor
+endfunction
+
 function! s:SlimeConfig() abort
   call inputsave()
   call s:SlimeDispatch('Config')
@@ -213,6 +220,7 @@ command -bar -nargs=0 SlimeConfig call s:SlimeConfig()
 command -range -bar -nargs=0 SlimeSend <line1>,<line2>call s:SlimeSendRange()
 command -nargs=+ SlimeSend1 call s:SlimeSend(<q-args> . "\r")
 command -nargs=+ SlimeSend0 call s:SlimeSend(<args>)
+command -nargs=+ SlimeSendRaw call s:SlimeSendRaw(<args>)
 
 noremap <SID>Operator :<c-u>set opfunc=<SID>SlimeSendOp<cr>g@
 
